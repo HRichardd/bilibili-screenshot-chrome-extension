@@ -1,3 +1,4 @@
+import { writerStatus, toggleSimulation, ensureWriter } from './offscreen-client.js';
 const isVideo = url => /^https:\/\/www\.bilibili\.com\/video\//.test(url || '');
 
 async function openAssistant() {
@@ -16,11 +17,12 @@ async function capture(tab) {
   let result;
   try {
     if (!tab?.id || !isVideo(tab.url)) throw new Error('请切换到 Bilibili 普通视频页后按快捷键。');
+    await ensureWriter();
     result = await chrome.tabs.sendMessage(tab.id, { target: 'capture', type: 'capture' });
     if (!result) throw new Error('未收到截图结果，请刷新视频页后重试。');
   } catch (error) {
     result = { ok: false, error: error.message.includes('Receiving end')
-      ? '视频页尚未连接扩展，请刷新视频页，并确认截图助手已打开。' : error.message };
+      ? '视频页尚未连接扩展，请刷新视频页后重试。' : error.message };
   }
   await chrome.storage.local.set({ lastResult: { ...result, at: Date.now() } }).catch(console.error);
   await chrome.action.setBadgeText({ text: result.ok ? 'OK' : '!' }).catch(console.error);
@@ -44,12 +46,28 @@ chrome.runtime.onMessage.addListener((message, sender, reply) => {
     return true;
   }
   if (sender.tab?.url?.startsWith('https:')) return;
+  if (message.type === 'ensure-writer') {
+    ensureWriter().then(() => reply({ ok: true }), error => reply({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message.type === 'writer-result') {
+    chrome.storage.local.set({ lastResult: { ...message.result, at: Date.now() } }).then(() => reply({ ok: true }), error => reply({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message.type === 'writer-status') {
+    writerStatus().then(reply, error => reply({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message.type === 'simulate') {
+    toggleSimulation().then(reply, error => reply({ ok: false, error: error.message }));
+    return true;
+  }
   if (message.type === 'dashboard') {
     (async () => {
       const [tabs, commands, stored, assistant] = await Promise.all([
         chrome.tabs.query({ active: true, lastFocusedWindow: true }),
         chrome.commands.getAll(), chrome.storage.local.get('lastResult'),
-        chrome.runtime.sendMessage({ target: 'assistant', type: 'ping' }).catch(() => null)
+        writerStatus().catch(error => ({ ok: false, error: error.message }))
       ]);
       return { ok: true, video: isVideo(tabs[0]?.url), shortcut: commands.find(c => c.name === 'capture-frame')?.shortcut || '', assistant: assistant || null, last: stored.lastResult || null };
     })().then(reply, error => reply({ ok: false, error: error.message }));

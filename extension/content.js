@@ -19,7 +19,7 @@
     });
     if (failed && recovery) {
       const button = document.createElement('button');
-      button.textContent = '打开截图助手';
+      button.textContent = '打开截图设置';
       Object.assign(button.style, { marginLeft: '12px', cursor: 'pointer', padding: '4px 8px', color: '#183833', background: '#fff', border: '0', borderRadius: '4px' });
       button.addEventListener('click', () => chrome.runtime.sendMessage({ target: 'background', type: 'open-assistant' }).catch(() => {}));
       box.append(button);
@@ -43,8 +43,8 @@
   async function assistant(type, fields) {
     let response;
     try { response = await chrome.runtime.sendMessage({ target: 'assistant', type, ...fields }); }
-    catch { throw new Error('截图助手未连接，请点击扩展图标打开助手并保留该标签页。'); }
-    if (!response) throw new Error('截图助手未连接，请点击扩展图标打开助手。');
+    catch { throw new Error('后台未连接，请检查扩展是否启用并刷新视频页。'); }
+    if (!response) throw new Error('后台没有响应，请重新加载扩展并刷新视频页。');
     if (!response.ok) throw new Error(response.error || '保存失败。');
     return response;
   }

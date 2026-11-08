@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bilibili 截图助手</title><link rel="stylesheet" href="style.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Bilibili 截图设置</title><link rel="stylesheet" href="style.css"></head>
 <body>
   <main>
     <header><span class="tag">BILIBILI / FRAME CAPTURE</span><h1>留下这一帧。</h1><p>提取视频原始画面，保存到你选择的文件夹。</p></header>
-    <section><h2>保存位置</h2><p id="directory">正在检查目录…</p><div class="row"><button id="choose">选择保存文件夹</button><button id="authorize" class="secondary">重新授权</button><button id="probe" class="secondary">试写验证</button></div><p class="hint">试写会在目录中创建一个小型验证文本文件。浏览器通常只提供文件夹名称，不提供完整路径。</p></section>
+    <section><h2>保存位置</h2><p id="directory">正在检查目录…</p><div class="row"><button id="choose">选择保存文件夹</button><button id="authorize" class="secondary">重新授权</button><button id="probe" class="secondary">检查保存权限</button></div><p class="hint">选择并授权后可以关闭本页，直接在 Bilibili 使用快捷键截图。浏览器通常只显示文件夹名称，不提供完整路径。</p></section>
     <section><h2>截图快捷键</h2><p><kbd id="shortcut">读取中…</kbd></p><button id="shortcuts" class="secondary">修改快捷键 ↗</button><p class="hint">在浏览器的扩展快捷键页面修改。浏览器需获得焦点，目标 B 站标签页需处于激活状态。</p></section>
     <section><h2>截图</h2><div class="row"><select id="video-tabs" aria-label="选择 Bilibili 视频标签页"></select><button id="refresh" class="secondary">刷新列表</button><button id="capture">截取所选视频</button></div><p class="hint">日常可切回视频页使用快捷键，或点击扩展弹窗中的截图按钮。图片为 PNG，保留视频内嵌字幕与游戏界面。</p></section>
-    <section><h2>运行状态</h2><p id="status" role="status" aria-live="polite">正在启动…</p><p id="queue" class="hint">待处理截图：0 / 3</p><p id="last" class="hint"></p><p id="runtime" class="hint"></p></section>
+    <section><h2>运行状态</h2><p id="status" role="status" aria-live="polite">正在启动…</p><p class="hint">最多同时处理 3 张截图；无需保留本设置页。</p><p id="last" class="hint"></p><p id="runtime" class="hint"></p></section>
     <section><h2>图片保存规则</h2><p>PNG · 当前视频流原始尺寸 · 自动避免重名覆盖</p><p class="hint">文件名：标题_BV号_P分集_视频时间_保存时间.png。不会自动切换清晰度；文件夹授权只对当前设备有效。</p></section>
-    <details><summary>故障验证（可选）</summary><p class="hint">无需制造磁盘故障。开启后，下一张进入保存步骤的截图将主动失败，不创建图片文件，随后自动恢复。请只触发一张截图进行验证；刷新或关闭助手也会取消测试。</p><button id="simulate" class="secondary">模拟下一次保存失败</button></details>
-    <footer>请保留此助手标签页，可以放在后台；关闭后无法保存截图。所有图片仅在本机处理，不上传网络。<br>刚安装或重新加载扩展后，请刷新助手页和已打开的 B 站视频页。</footer>
-  </main><script type="module" src="assistant.js"></script>
+    <details><summary>故障验证（可选）</summary><p class="hint">开启后，下一张进入保存步骤的截图将主动失败，不创建图片文件，随后自动恢复。请只触发一张截图进行验证；关闭设置页不会取消测试，可再次点击按钮取消，重新加载扩展也会取消。</p><button id="simulate" class="secondary">模拟下一次保存失败</button></details>
+    <footer>图片仅在本机处理，不上传网络。授权完成后无需保留本设置页；权限失效时重新授权即可。<br>刚安装或重新加载扩展后，请刷新已打开的 B 站视频页。</footer>
+  </main><script type="module" src="settings.js"></script>
 </body></html>

@@ -9,12 +9,12 @@ async function refresh() {
   const data = await send('dashboard');
   if (!data?.ok) throw new Error(data?.error || '无法读取扩展状态。');
   const ready = data.assistant?.ok && data.assistant.permission === 'granted';
-  $('directory').textContent = data.assistant?.name || '尚未连接助手';
+  $('directory').textContent = data.assistant?.name || '尚未选择目录';
   $('shortcut').textContent = data.shortcut || '未绑定';
   $('capture').disabled = capturing || !ready || !data.video;
   if (!capturing) {
-    if (!data.assistant?.ok) status('助手未连接，请打开助手并保留标签页。', true);
-    else if (!ready) status('请在助手中选择文件夹或重新授权。', true);
+    if (!data.assistant?.ok) status(data.assistant?.error || '后台不可用，请打开设置检查。', true);
+    else if (!ready) status('请在设置中选择文件夹或重新授权。', true);
     else if (!data.video) status('请先切换到 Bilibili 普通视频页。');
     else status(`可以截图 · 待处理 ${data.assistant.pending} / 3`);
   }
