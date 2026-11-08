@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Bilibili 原帧截图",
+  "version": "0.2.2",
+  "description": "快捷键提取 Bilibili 视频当前原始帧，保存到授权的本地目录。",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.bilibili.com/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Bilibili 原帧截图", "default_popup": "popup.html" },
+  "options_page": "assistant.html",
+  "commands": {
+    "capture-frame": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "保存 Bilibili 当前视频帧"
+    }
+  },
+  "content_scripts": [{
+    "matches": ["https://www.bilibili.com/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }]
+}

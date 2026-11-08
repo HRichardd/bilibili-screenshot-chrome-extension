@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>Bilibili 原帧截图</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="popup.css"></head>
+<body><main>
+  <span class="tag">BILIBILI / FRAME CAPTURE</span><h1>原帧截图</h1>
+  <p id="status" role="status" aria-live="polite">正在检查…</p>
+  <dl><dt>保存文件夹</dt><dd id="directory">—</dd><dt>截图快捷键</dt><dd><kbd id="shortcut">—</kbd></dd></dl>
+  <button id="capture" disabled>保存当前视频帧</button>
+  <div class="row"><button id="assistant" class="secondary">打开助手 / 设置</button><button id="shortcuts" class="secondary">修改快捷键</button></div>
+  <p id="last" class="hint"></p><p class="hint">请保留助手标签页。PNG 原始尺寸，不含网页播放器控件。</p>
+</main><script type="module" src="popup.js"></script></body>
+</html>
